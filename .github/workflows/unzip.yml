@@ -1,0 +1,24 @@
+name: Unzip daofa-pages
+on:
+  workflow_dispatch:
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unzip to root
+        run: |
+          unzip -o daofa-pages.zip
+          mv daofa-pages/index.html ./index.html
+          mv daofa-pages/README.md ./README.md
+          rm -rf daofa-pages daofa-pages.zip
+          ls -la
+      - name: Commit extracted files
+        run: |
+          git config user.name "xigua0291"
+          git config user.email "1018316746@qq.com"
+          git add -A
+          git commit -m "Extract daofa-pages.zip to root" || echo "nothing to commit"
+          git push
